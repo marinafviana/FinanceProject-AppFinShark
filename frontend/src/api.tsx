@@ -1,42 +1,36 @@
-import { ChangeEvent, SyntheticEvent, useState } from "react";
-import "./App.css";
-import CardList from "./Components/CardList/CardList";
-import Search from "./Components/Search/Search";
-import { searchCompanies } from "./api";
-import { CompanySearch } from "./company";
+import axios from "axios";
+import { CompanySearch } from "./company.d";
 
-function App() {
-  const [search, setSearch] = useState<string>("");
-  const [searchResult, setSearchResult] = useState<CompanySearch[]>([]);
-  const [serverError, setServerError] = useState<string | null>(null);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
-
-  const onClick = async (e: SyntheticEvent) => {
-    e.preventDefault();
-
-    const result = await searchCompanies(search);
-
-    if (typeof result === "string") {
-      setServerError(result);
-      setSearchResult([]);
-    } else {
-      setSearchResult(result); 
-      setServerError(null);
-    }
-  };
-
-  return (
-    <div className="App">
-      <Search onClick={onClick} search={search} handleChange={handleChange} />
-
-      {serverError && <p>{serverError}</p>}
-
-      <CardList searchResult={searchResult} />
-    </div>
-  );
+interface FinnhubSearchResponse {
+  count: number;
+  result: CompanySearch[];
 }
 
-export default App;
+export const searchCompanies = async (
+  query: string
+): Promise<CompanySearch[] | string> => {
+  try {
+    console.log("API KEY:", process.env.REACT_APP_API_KEY);
+
+    const response = await axios.get<FinnhubSearchResponse>(
+      "https://finnhub.io/api/v1/search",
+      {
+        params: {
+          q: query,
+          token: process.env.REACT_APP_API_KEY,
+        },
+      }
+    );
+
+    console.log("RESPOSTA:", response.data);
+
+    return response.data.result;
+  } catch (error: any) {
+    console.log("ERRO COMPLETO:", error);
+    console.log("STATUS:", error.response?.status);
+    console.log("DATA:", error.response?.data);
+    console.log("MESSAGE:", error.message);
+
+    return "Erro ao conectar com a API";
+  }
+};

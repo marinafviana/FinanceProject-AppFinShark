@@ -3,7 +3,7 @@ import "./App.css";
 import CardList from "./Components/CardList/CardList";
 import Search from "./Components/Search/Search";
 import { searchCompanies } from "./api";
-import { CompanySearch } from "./company";
+import { CompanySearch } from "./company.d";
 
 function App() {
   const [search, setSearch] = useState<string>("");
@@ -34,7 +34,7 @@ function App() {
 
       {serverError && <div>Unable to connect to API</div>}
 
-      <CardList searchResult={searchResult} />
+      <CardList searchResults={searchResult} />
     </div>
   );
 }
