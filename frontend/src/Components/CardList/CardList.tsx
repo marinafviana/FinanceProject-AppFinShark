@@ -4,17 +4,24 @@ import { CompanySearch } from "../../company.d";
 
 interface Props {
   searchResults: CompanySearch[];
+  onPortfolioCreate: (symbol: string) => void;
 }
 
-const CardList: React.FC<Props> = ({ searchResults }: Props) => {
+const CardList: React.FC<Props> = ({
+  searchResults,
+  onPortfolioCreate,
+}) => {
   return (
     <>
       {searchResults.length > 0 ? (
-        searchResults.map((result) => {
-          return (
-            <Card id={result.symbol} key={result.symbol} searchResult={result}/>
-          );
-        })
+        searchResults.map((result) => (
+          <Card
+            id={result.symbol}
+            key={result.symbol} // 🔥 melhor que uuid
+            searchResult={result}
+            onPortfolioCreate={onPortfolioCreate}
+          />
+        ))
       ) : (
         <h1>No results!</h1>
       )}
