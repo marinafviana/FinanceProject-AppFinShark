@@ -1,8 +1,8 @@
 export interface CompanySearch {
-  description: string;      
-  displaySymbol: string;    
-  symbol: string;           
-  type: string;             
+  description: string;
+  displaySymbol: string;
+  symbol: string;
+  type: string;
 }
 
 export interface CompanyProfile {

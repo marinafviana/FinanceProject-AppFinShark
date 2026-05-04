@@ -5,6 +5,8 @@ import Search from "./Components/Search/Search";
 import { searchCompanies } from "./api";
 import { CompanySearch } from "./company.d";
 import ListPortfolio from "./Components/Portfolio/ListPortfolio/ListPortfolio";
+import Navbar from "./Components/Navbar/Navbar";
+import Hero from "./Components/Hero/Hero";
 
 function App() {
   const [search, setSearch] = useState<string>("");
@@ -18,7 +20,6 @@ function App() {
 
   const onPortfolioCreate = (symbol: string) => {
     if (portfolioValues.includes(symbol)) return;
-
     setPortfolioValues((prev) => [...prev, symbol]);
   };
 
@@ -30,6 +31,8 @@ function App() {
 
   const onSearchSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+
+    if (!search.trim()) return; 
 
     const result = await searchCompanies(search);
 
@@ -44,6 +47,10 @@ function App() {
 
   return (
     <div className="App">
+      <Navbar />
+
+      <Hero /> 
+
       <Search
         onSearchSubmit={onSearchSubmit}
         search={search}
@@ -60,7 +67,7 @@ function App() {
         onPortfolioCreate={onPortfolioCreate}
       />
 
-      {serverError && <div>Unable to connect to API</div>}
+      {serverError && <div>{serverError}</div>}
     </div>
   );
 }
