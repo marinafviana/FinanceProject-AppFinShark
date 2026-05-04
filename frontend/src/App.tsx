@@ -16,17 +16,16 @@ function App() {
     setSearch(e.target.value);
   };
 
-
   const onPortfolioCreate = (symbol: string) => {
     if (portfolioValues.includes(symbol)) return;
 
-    setPortfolioValues([...portfolioValues, symbol]);
+    setPortfolioValues((prev) => [...prev, symbol]);
   };
 
-
   const onPortfolioDelete = (symbol: string) => {
-    const updated = portfolioValues.filter((value) => value !== symbol);
-    setPortfolioValues(updated);
+    setPortfolioValues((prev) =>
+      prev.filter((value) => value !== symbol)
+    );
   };
 
   const onSearchSubmit = async (e: SyntheticEvent) => {
@@ -38,7 +37,7 @@ function App() {
       setServerError(result);
       setSearchResult([]);
     } else {
-      setSearchResult(result); 
+      setSearchResult(result);
       setServerError(null);
     }
   };
