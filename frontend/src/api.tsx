@@ -1,36 +1,31 @@
 import axios from "axios";
-import { CompanySearch } from "./company.d";
+import { CompanyProfile, CompanySearch } from "./company.d";
 
-interface FinnhubSearchResponse {
+export interface SearchResponse {
   count: number;
   result: CompanySearch[];
 }
 
-export const searchCompanies = async (
-  query: string
-): Promise<CompanySearch[] | string> => {
+export const searchCompanies = async (query: string) => {
   try {
-    console.log("API KEY:", process.env.REACT_APP_API_KEY);
-
-    const response = await axios.get<FinnhubSearchResponse>(
-      "https://finnhub.io/api/v1/search",
-      {
-        params: {
-          q: query,
-          token: process.env.REACT_APP_API_KEY,
-        },
-      }
+    const data = await axios.get<SearchResponse>(
+      `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.REACT_APP_API_KEY}`
     );
+    return data;
+  } catch (error: any) { 
+    console.log("error message: ", error.message);
+    return error.message || "An unexpected error has occurred.";
+  }
+};
 
-    console.log("RESPOSTA:", response.data);
-
-    return response.data.result;
-  } catch (error: any) {
-    console.log("ERRO COMPLETO:", error);
-    console.log("STATUS:", error.response?.status);
-    console.log("DATA:", error.response?.data);
-    console.log("MESSAGE:", error.message);
-
-    return "Erro ao conectar com a API";
+export const getCompanyProfile = async (query: string) => {
+  try {
+    const data = await axios.get<CompanyProfile>(
+      `https://finnhub.io/api/v1/stock/profile2?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+    );
+    return data;
+  } catch (error: any) { 
+    console.log("error message: ", error.message);
+    return error.message || "An unexpected error has occurred.";
   }
 };

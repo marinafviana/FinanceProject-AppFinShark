@@ -27,18 +27,18 @@ const SearchPage = () => {
   };
 
   const onSearchSubmit = async (e: SyntheticEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const result = await searchCompanies(search);
+  const result = await searchCompanies(search);
 
-    if (typeof result === "string") {
-      setServerError(result);
-      setSearchResult([]);
-    } else {
-      setSearchResult(result); 
-      setServerError(null);
-    }
-  };
+  if (typeof result === "string") {
+    setServerError(result);
+    setSearchResult([]);
+  } else {
+    setSearchResult(result.data.result);
+    setServerError(null);
+  }
+};
 
   return (
     <>

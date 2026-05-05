@@ -6,6 +6,12 @@ export interface CompanySearch {
 }
 
 export interface CompanyProfile {
+  name: string; //alteracao minha
+  ticker: string; //alteracao minha
+  finnhubIndustry: string; //alteracao minha
+  logo: string; //alteracao minha
+  weburl: string; //alteracao minha
+
   symbol: string;
   price: number;
   beta: number;
