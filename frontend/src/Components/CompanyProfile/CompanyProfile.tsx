@@ -4,52 +4,49 @@ import { CompanyKeyMetrics } from "../../company.d";
 import { getKeyMetrics } from "../../api";
 import RatioList from "../RatioList/RatioList";
 
-
-type Props = {}
+type Props = {};
 
 const tableConfig = [
   {
     label: "Market Cap",
-    render: (company: CompanyKeyMetrics) => company.marketCapTTM,
+    render: (company: any) => company.marketCapitalization,
   },
   {
     label: "Current Ratio",
-    render: (company: CompanyKeyMetrics) => company.currentRatioTTM,
+    render: (company: any) => company.currentRatioAnnual,
   },
   {
     label: "Return On Equity",
-    render: (company: CompanyKeyMetrics) => company.roeTTM,
+    render: (company: any) => company.roeTTM,
   },
   {
     label: "Cash Per Share",
-    render: (company: CompanyKeyMetrics) => company.cashPerShareTTM,
-  },
-  {
-    label: "Current Ratio",
-    render: (company: CompanyKeyMetrics) => company.currentRatioTTM,
-  },
-  {
-    label: "Return On Equity",
-    render: (company: CompanyKeyMetrics) => company.roeTTM,
+    render: (company: any) => company.cashPerShareTTM,
   },
 ];
 
 const CompanyProfile = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [companyData, setCompanyData] = useState<CompanyKeyMetrics>();
+  const [companyData, setCompanyData] = useState<any>(null);
+
   useEffect(() => {
     const getCompanyKeyRatios = async () => {
       const value = await getKeyMetrics(ticker);
-      setCompanyData(value?.data[0]);
+
+      if (typeof value !== "string" && value?.data?.metric) {
+        setCompanyData(value.data.metric); 
+      } else {
+        setCompanyData(null);
+      }
     };
+
     getCompanyKeyRatios();
-  }, []);
+  }, [ticker]);
+
   return (
     <>
       {companyData ? (
-        <>
-          <RatioList config={tableConfig} data={companyData} />
-        </>
+        <RatioList config={tableConfig} data={companyData} />
       ) : (
         <h1>No data found</h1>
       )}
