@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { CompanyKeyMetrics } from "../../company.d";
 import { getKeyMetrics } from "../../api";
 import RatioList from "../RatioList/RatioList";
+import Spinner from "../Spinner/Spinner";
 
 type Props = {};
 
@@ -27,28 +28,22 @@ const tableConfig = [
 
 const CompanyProfile = (props: Props) => {
   const ticker = useOutletContext<string>();
-  const [companyData, setCompanyData] = useState<any>(null);
-
+  const [companyData, setCompanyData] = useState<CompanyKeyMetrics>();
   useEffect(() => {
     const getCompanyKeyRatios = async () => {
       const value = await getKeyMetrics(ticker);
-
-      if (typeof value !== "string" && value?.data?.metric) {
-        setCompanyData(value.data.metric); 
-      } else {
-        setCompanyData(null);
-      }
+      setCompanyData(value?.data[0]);
     };
-
     getCompanyKeyRatios();
-  }, [ticker]);
-
+  }, []);
   return (
     <>
       {companyData ? (
-        <RatioList config={tableConfig} data={companyData} />
+        <>
+          <RatioList config={tableConfig} data={companyData} />
+        </>
       ) : (
-        <h1>No data found</h1>
+        <Spinner />
       )}
     </>
   );
