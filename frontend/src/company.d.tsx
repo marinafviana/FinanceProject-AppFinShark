@@ -319,3 +319,10 @@ export interface CompanyCompData{
   symbol: string;
   peersList: string[];
 }
+
+export interface CompanyTenK {
+  symbol: string;
+  filedDate: string;
+  form: string;
+  accessNumber: string;
+}

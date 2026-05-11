@@ -7,6 +7,7 @@ import {
   CompanyKeyMetrics,
   CompanyProfile,
   CompanySearch,
+  CompanyTenK,
 } from "./company.d";
 
 export interface SearchResponse {
@@ -109,6 +110,19 @@ export const getCompData = async (query: string) => {
   try {
     const data = await axios.get<CompanyCompData[]>(
       `https://finnhub.io/api/v1/stock/peers?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+    );
+
+    return data;
+  } catch (error: any) {
+    console.log("error message: ", error.message);
+    return error.message || "An unexpected error has occurred.";
+  }
+};
+
+export const getTenK = async (query: string) => {
+  try {
+    const data = await axios.get<CompanyTenK[]>(
+      `https://finnhub.io/api/v1/stock/filings?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
     );
 
     return data;

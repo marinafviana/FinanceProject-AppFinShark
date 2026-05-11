@@ -7,6 +7,7 @@ import CompanyDashboard from "../../Components/CompanyDashboard/CompanyDashboard
 import Tile from "../../Components/Tile/Tile";
 import Spinner from "../../Components/Spinner/Spinner";
 import CompFinder from "../../Components/CompFinder/CompFinder";
+import TenKFinder from "../../Components/TenKFinder/TenKFinder";
 
 const CompanyPage = () => {
   const { ticker } = useParams();
@@ -66,6 +67,7 @@ const CompanyPage = () => {
             />
 
             <CompFinder ticker={company.ticker} />
+            <TenKFinder ticker={company.ticker} />
 
           </CompanyDashboard>
 
