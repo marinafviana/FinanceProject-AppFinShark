@@ -4,29 +4,49 @@ import Table from "../Table/Table";
 import { CompanyIncomeStatement } from "../../company.d";
 import { getIncomeStatement } from "../../api";
 import Spinner from "../Spinner/Spinner";
+import { formatLargeMonetaryNumber, formatRatio } from "../../Helpers/NumberFormatting";
 
 type Props = {}
 
 const configs = [
   {
     label: "Date",
-    render: (company: CompanyIncomeStatement) => company.date,
+    render: (company: any) => company.endDate,
   },
   {
-    label: "Total Revenue",
-    render: (company: CompanyIncomeStatement) => company.revenue,
+    label: "Revenue",
+    render: (company: any) =>
+      formatLargeMonetaryNumber(company.revenue),
+  },
+  {
+    label: "Cost Of Revenue",
+    render: (company: any) =>
+      formatLargeMonetaryNumber(company.costOfRevenue),
+  },
+  {
+    label: "Operating Income",
+    render: (company: any) =>
+      formatLargeMonetaryNumber(company.operatingIncome),
   },
   {
     label: "Net Income",
-    render: (company: CompanyIncomeStatement) => company.netIncome,
+    render: (company: any) =>
+      formatLargeMonetaryNumber(company.netIncome),
   },
   {
-    label: "Operating Expenses",
-    render: (company: CompanyIncomeStatement) => company.operatingExpenses,
+    label: "Gross Profit",
+    render: (company: any) =>
+      formatLargeMonetaryNumber(company.grossProfit),
   },
   {
-    label: "Cost of Revenue",
-    render: (company: CompanyIncomeStatement) => company.netIncome,
+    label: "EPS",
+    render: (company: any) =>
+      formatRatio(company.eps),
+  },
+  {
+    label: "Diluted EPS",
+    render: (company: any) =>
+      formatRatio(company.epsDiluted),
   },
 ];
 

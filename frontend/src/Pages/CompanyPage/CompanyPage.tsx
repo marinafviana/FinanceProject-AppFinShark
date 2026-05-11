@@ -53,17 +53,17 @@ const CompanyPage = () => {
 
             <Tile
               title="Price"
-              subTitle={price?.toString() || "N/A"}
+              subTitle={price ? `$${price}` : "N/A"}
+            />
+
+            <Tile
+              title="Market Cap"
+              subTitle={company.marketCapitalization ? `$${company.marketCapitalization}` : "N/A"}
             />
 
             <Tile
               title="Sector"
               subTitle={company.finnhubIndustry || "N/A"}
-            />
-
-            <Tile
-              title="Market Cap"
-              subTitle={company.marketCapitalization?.toString() || "N/A"}
             />
 
             <CompFinder ticker={company.ticker} />

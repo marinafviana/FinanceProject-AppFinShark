@@ -1,64 +1,93 @@
 import React, { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { CompanyCashFlow } from "../../company.d";
 import { getCashFlow } from "../../api";
-import Table from "../Table/Table";
+import RatioList from "../RatioList/RatioList";
 import Spinner from "../Spinner/Spinner";
 
-type Props = {}
+type Props = {};
 
 const config = [
   {
-    label: "Date",
-    render: (company: CompanyCashFlow) => company.date,
+    label: "Operating Cash Flow",
+    render: (company: any) =>
+      company.find(
+        (item: any) =>
+          item.concept ===
+          "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"
+      )?.value || "N/A",
   },
   {
-    label: "Operating Cashflow",
-    render: (company: CompanyCashFlow) => company.operatingCashFlow,
+    label: "Investing Cash Flow",
+    render: (company: any) =>
+      company.find(
+        (item: any) =>
+          item.concept ===
+          "NetCashProvidedByUsedInInvestingActivitiesContinuingOperations"
+      )?.value || "N/A",
   },
   {
-    label: "Property/Machinery Cashflow",
-    render: (company: CompanyCashFlow) =>
-      company.investmentsInPropertyPlantAndEquipment,
+    label: "Financing Cash Flow",
+    render: (company: any) =>
+      company.find(
+        (item: any) =>
+          item.concept ===
+          "NetCashProvidedByUsedInFinancingActivitiesContinuingOperations"
+      )?.value || "N/A",
   },
   {
-    label: "Other Investing Cashflow",
-    render: (company: CompanyCashFlow) => company.otherInvestingActivites,
+    label: "Capital Expenditure",
+    render: (company: any) =>
+      company.find(
+        (item: any) =>
+          item.concept ===
+          "PaymentsToAcquirePropertyPlantAndEquipment"
+      )?.value || "N/A",
   },
   {
-    label: "Debt Cashflow",
-    render: (company: CompanyCashFlow) =>
-      company.netCashUsedProvidedByFinancingActivities,
-  },
-  {
-    label: "CapEX",
-    render: (company: CompanyCashFlow) => company.capitalExpenditure,
-  },
-  {
-    label: "Free Cash Flow",
-    render: (company: CompanyCashFlow) => company.freeCashFlow,
+    label: "Cash And Cash Equivalents",
+    render: (company: any) =>
+      company.find(
+        (item: any) =>
+          item.concept ===
+          "CashAndCashEquivalentsAtCarryingValue"
+      )?.value || "N/A",
   },
 ];
 
 const CashflowStatement = (props: Props) => {
-    const ticker = useOutletContext<string>();
-    const [cashflowData, setCashflow] = useState<CompanyCashFlow[]>();
-    useEffect(() => {
-        const fetchCashflow = async () => {
-            const result = await getCashFlow(ticker!);
-            setCashflow(result!.data);
-        };
+  const ticker = useOutletContext<string | undefined>();
+  const [cashflowData, setCashflow] = useState<any>(null);
 
-        fetchCashflow();
-    }, []);
-  return <>
-    { cashflowData ? (
-        <Table config={config} data={cashflowData} />
-    ) : (
-      <Spinner />
-    )}
-    </>;
-  
-}
+  useEffect(() => {
+    const fetchCashflow = async () => {
+      if (!ticker) return;
 
-export default CashflowStatement
+      const result = await getCashFlow(ticker);
+
+      console.log(result?.data?.data?.[0]?.report?.cf);
+
+      if (
+        typeof result !== "string" &&
+        result?.data?.data?.length > 0
+      ) {
+        setCashflow(result.data.data[0].report.cf);
+      } else {
+        setCashflow(null);
+      }
+    };
+
+    fetchCashflow();
+  }, [ticker]);
+
+  return (
+    <>
+      {cashflowData ? (
+        <RatioList config={config} data={cashflowData} />
+      ) : (
+        <Spinner />
+      )}
+    </>
+  );
+};
+
+export default CashflowStatement;

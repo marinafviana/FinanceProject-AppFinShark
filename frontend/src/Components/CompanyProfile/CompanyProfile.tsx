@@ -4,25 +4,44 @@ import { CompanyKeyMetrics } from "../../company.d";
 import { getKeyMetrics } from "../../api";
 import RatioList from "../RatioList/RatioList";
 import Spinner from "../Spinner/Spinner";
+import { formatLargeNonMonetaryNumber, formatRatio } from "../../Helpers/NumberFormatting";
 
 type Props = {};
 
 const tableConfig = [
   {
     label: "Market Cap",
-    render: (company: any) => company.marketCapitalization,
+    render: (company: any) =>
+      formatLargeNonMonetaryNumber(company.marketCapitalization),
+    subTitle: "Total value of all a company's shares of stock",
   },
   {
     label: "Current Ratio",
-    render: (company: any) => company.currentRatioAnnual,
+    render: (company: any) =>
+      formatRatio(company.currentRatioAnnual),
+    subTitle:
+      "Measures the companies ability to pay short term debt obligations",
   },
   {
-    label: "Return On Equity",
-    render: (company: any) => company.roeTTM,
+    label: "P/E Ratio",
+    render: (company: any) =>
+      formatRatio(company.peTTM),
+    subTitle:
+      "Price to Earnings Ratio",
   },
   {
-    label: "Cash Per Share",
-    render: (company: any) => company.cashPerShareTTM,
+    label: "52 Week High",
+    render: (company: any) =>
+      formatRatio(company["52WeekHigh"]),
+    subTitle:
+      "Highest stock price in the last 52 weeks",
+  },
+  {
+    label: "52 Week Low",
+    render: (company: any) =>
+      formatRatio(company["52WeekLow"]),
+    subTitle:
+      "Lowest stock price in the last 52 weeks",
   },
 ];
 
