@@ -11,6 +11,7 @@ export interface CompanyProfile {
   finnhubIndustry: string; //alteracao minha
   logo: string; //alteracao minha
   weburl: string; //alteracao minha
+  marketCapitalization: number;
 
   symbol: string;
   price: number;
@@ -312,4 +313,9 @@ export interface CompanyKeyMetrics {
   capexPerShareTTM: number;
   dividendPerShareTTM: number;
   debtToMarketCapTTM: number;
+}
+
+export interface CompanyCompData{
+  symbol: string;
+  peersList: string[];
 }

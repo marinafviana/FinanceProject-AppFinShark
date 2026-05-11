@@ -56,7 +56,7 @@ const CashflowStatement = (props: Props) => {
         <Table config={config} data={cashflowData} />
     ) : (
       <Spinner />
-    )};
+    )}
     </>;
   
 }
