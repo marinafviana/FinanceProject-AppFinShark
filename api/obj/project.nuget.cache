@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "4ZC9WcNucfg=",
+  "dgSpecHash": "oiXkqfc2VFA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Aluno\\Downloads\\FinanceProject-AppFinShark\\api\\api.csproj",
+  "projectFilePath": "C:\\Users\\luiza\\OneDrive\\Área de Trabalho\\FinanceProject-AppFinShark\\api\\api.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Aluno\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.5\\microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
-    "C:\\Users\\Aluno\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+    "C:\\Users\\luiza\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.5\\microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
+    "C:\\Users\\luiza\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
   ],
   "logs": []
 }
