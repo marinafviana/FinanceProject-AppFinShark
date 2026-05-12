@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaChartBar, FaMoneyBillWave, FaTable, } from "react-icons/fa";
+import { FaHouse, FaChartColumn, FaMoneyBillTrendUp, FaTable } from "react-icons/fa6";
 
 type Props = {};
 
@@ -19,7 +19,7 @@ const Sidebar = (props: Props) => {
                   to="company-profile"
                   className="flex md:min-w-full text-blueGray-500 text-medium uppercase font-bold block pt--1 pb-4 no-underline "
                   >
-                    <FaHome />
+                    <FaHouse />
                     <h6 className="ml-3">Company Profile</h6>
                   </Link>
 
@@ -27,7 +27,7 @@ const Sidebar = (props: Props) => {
                   to="income-statement" 
                   className="flex md:min-w-full text-blueGray-500 text-medium uppercase font-bold block pt--1 pb-4 no-underline "
                   >
-                    <FaChartBar />
+                    <FaChartColumn />
                     <h6 className="ml-3">Income Statement</h6>
                   </Link>
 
@@ -35,7 +35,7 @@ const Sidebar = (props: Props) => {
                   to="balance-sheet" 
                   className="flex md:min-w-full text-blueGray-500 text-medium uppercase font-bold block pt--1 pb-4 no-underline "
                   >
-                    <FaMoneyBillWave />
+                    <FaMoneyBillTrendUp />
                     <h6 className="ml-3">Balance Sheet</h6>
                   </Link>
 

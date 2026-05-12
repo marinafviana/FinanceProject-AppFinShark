@@ -14,7 +14,7 @@ const config = [
         (item: any) =>
           item.concept ===
           "NetCashProvidedByUsedInOperatingActivitiesContinuingOperations"
-      )?.value || "N/A",
+      )?.value ?? "N/A",
   },
   {
     label: "Investing Cash Flow",
@@ -23,7 +23,7 @@ const config = [
         (item: any) =>
           item.concept ===
           "NetCashProvidedByUsedInInvestingActivitiesContinuingOperations"
-      )?.value || "N/A",
+      )?.value ?? "N/A",
   },
   {
     label: "Financing Cash Flow",
@@ -32,39 +32,38 @@ const config = [
         (item: any) =>
           item.concept ===
           "NetCashProvidedByUsedInFinancingActivitiesContinuingOperations"
-      )?.value || "N/A",
+      )?.value ?? "N/A",
   },
   {
     label: "Capital Expenditure",
     render: (company: any) =>
       company.find(
         (item: any) =>
-          item.concept ===
-          "PaymentsToAcquirePropertyPlantAndEquipment"
-      )?.value || "N/A",
+          item.concept === "PaymentsToAcquirePropertyPlantAndEquipment"
+      )?.value ?? "N/A",
   },
   {
     label: "Cash And Cash Equivalents",
     render: (company: any) =>
       company.find(
         (item: any) =>
-          item.concept ===
-          "CashAndCashEquivalentsAtCarryingValue"
-      )?.value || "N/A",
+          item.concept === "CashAndCashEquivalentsAtCarryingValue"
+      )?.value ?? "N/A",
   },
 ];
 
 const CashflowStatement = (props: Props) => {
   const ticker = useOutletContext<string | undefined>();
   const [cashflowData, setCashflow] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCashflow = async () => {
       if (!ticker) return;
 
-      const result = await getCashFlow(ticker);
+      setIsLoading(true);
 
-      console.log(result?.data?.data?.[0]?.report?.cf);
+      const result = await getCashFlow(ticker);
 
       if (
         typeof result !== "string" &&
@@ -74,20 +73,18 @@ const CashflowStatement = (props: Props) => {
       } else {
         setCashflow(null);
       }
+
+      setIsLoading(false);
     };
 
     fetchCashflow();
   }, [ticker]);
 
-  return (
-    <>
-      {cashflowData ? (
-        <RatioList config={config} data={cashflowData} />
-      ) : (
-        <Spinner />
-      )}
-    </>
-  );
+  if (isLoading) return <Spinner />;
+
+  if (!cashflowData) return <p className="text-gray-500 p-4">No cashflow data available.</p>;
+
+  return <RatioList config={config} data={cashflowData} />;
 };
 
 export default CashflowStatement;
