@@ -62,10 +62,6 @@
               "target": "Package",
               "version": "[10.0.8, )"
             },
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[10.0.8, )"
-            },
             "Microsoft.EntityFrameworkCore.Design": {
               "target": "Package",
               "version": "[10.0.8, )"
@@ -74,21 +70,13 @@
               "target": "Package",
               "version": "[10.0.8, )"
             },
-            "Microsoft.Extensions.Identity.Core": {
-              "target": "Package",
-              "version": "[11.0.0-preview.4.26230.115, )"
-            },
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[13.0.5-beta1, )"
-            },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[10.0.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[10.1.7, )"
+              "version": "[6.5.0, )"
             }
           },
           "imports": [
