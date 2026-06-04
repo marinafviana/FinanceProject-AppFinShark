@@ -36,5 +36,18 @@ namespace api.Mappers
                 MarketCap = stockDto.MarketCap
             };
         }
+
+        public static Stock ToStockFromFMP(this FMPStock fmpStock)
+        {
+            return new Stock
+            {
+                Symbol = fmpStock.ticker ?? "",
+                CompanyName = fmpStock.name ?? "",
+                Purchase = 0,
+                LastDiv = 0,
+                Industry = fmpStock.finnhubIndustry ?? "",
+                MarketCap = (long)fmpStock.marketCapitalization
+            };
+        }
     }
 }
