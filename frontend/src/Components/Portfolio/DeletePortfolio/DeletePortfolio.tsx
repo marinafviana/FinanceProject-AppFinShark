@@ -1,25 +1,16 @@
-import React, { FormEvent } from "react";
+import React, { SyntheticEvent } from "react";
 
 interface Props {
-  onPortfolioDelete: (symbol: string) => void;
+  onPortfolioDelete: (e: SyntheticEvent) => void;
   portfolioValue: string;
 }
 
-const DeletePortfolio: React.FC<Props> = ({
-  onPortfolioDelete,
-  portfolioValue,
-}) => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onPortfolioDelete(portfolioValue);
-  };
-
+const DeletePortfolio = ({ onPortfolioDelete, portfolioValue }: Props) => {
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <button
-          type="submit"
-          className="block w-full py-3 text-white duration-200 border-2 rounded-lg bg-red-500 hover:text-red-500 hover:bg-white border-red-500">
+      <form onSubmit={onPortfolioDelete}>
+        <input hidden={true} value={portfolioValue} />
+        <button className="block w-full py-3 text-white duration-200 border-2 rounded-lg bg-red-500 hover:text-red-500 hover:bg-white border-red-500">
           X
         </button>
       </form>
