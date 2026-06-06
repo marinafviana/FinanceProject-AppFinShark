@@ -1,35 +1,36 @@
-import React from "react";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useAuth } from "../../Context/userAuth";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../../Context/userAuth";
 
 type Props = {};
 
-type RegisterFormsInputs = {
-  email: string;
-  userName: string;
-  password: string;
-};
-
-const validation = Yup.object().shape({
-  email: Yup.string().required("Email is required"),
-  userName: Yup.string().required("Username is required"),
-  password: Yup.string().required("Password is required"),
-});
-
 const RegisterPage = (props: Props) => {
   const { registerUser } = useAuth();
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormsInputs>({ resolver: yupResolver(validation) });
+  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  const handleRegister = (form: RegisterFormsInputs) => {
-    registerUser(form.email, form.userName, form.password);
+    if (!email.trim() || !userName.trim() || !password) {
+      toast.warning("Fill in email, username and password.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.warning("Password must be at least 6 characters.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await registerUser(email.trim(), userName.trim(), password);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,10 +42,7 @@ const RegisterPage = (props: Props) => {
               Sign up for your account
             </h1>
 
-            <form
-              className="space-y-4 md:space-y-6"
-              onSubmit={handleSubmit(handleRegister)}
-            >
+            <form className="space-y-4 md:space-y-6" onSubmit={handleRegister}>
               <div>
                 <label
                   htmlFor="email"
@@ -54,18 +52,13 @@ const RegisterPage = (props: Props) => {
                 </label>
 
                 <input
-                  type="text"
+                  type="email"
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Email"
-                  {...register("email")}
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
                 />
-
-                {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.email.message}
-                  </p>
-                )}
               </div>
 
               <div>
@@ -81,14 +74,9 @@ const RegisterPage = (props: Props) => {
                   id="username"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   placeholder="Username"
-                  {...register("userName")}
+                  value={userName}
+                  onChange={(event) => setUserName(event.target.value)}
                 />
-
-                {errors.userName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.userName.message}
-                  </p>
-                )}
               </div>
 
               <div>
@@ -102,23 +90,19 @@ const RegisterPage = (props: Props) => {
                 <input
                   type="password"
                   id="password"
-                  placeholder="••••••••"
+                  placeholder="Minimum 6 characters"
                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  {...register("password")}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
                 />
-
-                {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password.message}
-                  </p>
-                )}
               </div>
 
               <button
                 type="submit"
-                className="w-full text-white bg-lightGreen hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                disabled={isSubmitting}
+                className="w-full text-white bg-lightGreen hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Sign up
+                {isSubmitting ? "Creating account..." : "Sign up"}
               </button>
 
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">

@@ -35,12 +35,13 @@ namespace api.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = await _userManager.Users.FirstOrDefaultAsync(
-                x => x.NormalizedUserName == loginDto.Username.ToUpper()
-            );
+            var login = loginDto.Username.ToLower();
+            var user = await _userManager.Users.FirstOrDefaultAsync(x =>
+                (x.UserName != null && x.UserName.ToLower() == login) ||
+                (x.Email != null && x.Email.ToLower() == login));
 
             if (user == null)
-                return Unauthorized("Invalid username!");
+                return Unauthorized("Invalid username or email!");
 
             var result = await _signinManager.CheckPasswordSignInAsync(
                 user,
@@ -49,13 +50,13 @@ namespace api.Controllers
             );
 
             if (!result.Succeeded)
-                return Unauthorized("Username not found and/or password incorrect");
+                return Unauthorized("Username/email not found and/or password incorrect");
 
             return Ok(
                 new NewUserDto
                 {
-                    UserName = user.UserName,
-                    Email = user.Email,
+                    UserName = user.UserName ?? string.Empty,
+                    Email = user.Email ?? string.Empty,
                     Token = _tokenService.CreateToken(user)
                 }
             );
@@ -89,20 +90,20 @@ namespace api.Controllers
                         return Ok(
                             new NewUserDto
                             {
-                                UserName = appUser.UserName,
-                                Email = appUser.Email,
+                                UserName = appUser.UserName ?? string.Empty,
+                                Email = appUser.Email ?? string.Empty,
                                 Token = _tokenService.CreateToken(appUser)
                             }
                         );
                     }
                     else
                     {
-                        return StatusCode(500, roleResult.Errors);
+                        return BadRequest(roleResult.Errors);
                     }
                 }
                 else
                 {
-                    return StatusCode(500, createdUser.Errors);
+                    return BadRequest(createdUser.Errors);
                 }
             }
             catch (Exception e)

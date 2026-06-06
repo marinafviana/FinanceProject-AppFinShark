@@ -27,7 +27,7 @@ const StockComment = ({ stockSymbol }: Props) => {
     commentPostAPI(e.title, e.content, stockSymbol)
       .then((res) => {
         if (res) {
-          toast.success("Comment created successfully!");
+          toast.success("Comentario adicionado!");
           getComments();
         }
       })

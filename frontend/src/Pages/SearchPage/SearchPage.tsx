@@ -39,17 +39,15 @@ const SearchPage = (props: Props) => {
             });
     };
 
-    const onPortfolioCreate = (e: any) => {
-        e.preventDefault();
+    const onPortfolioCreate = (symbol: string) => {
+        const normalizedSymbol = symbol.trim();
 
-        const symbol = e.target[0].value;
-
-        if (portfolioValues?.some(p => p.symbol === symbol)) {
+        if (portfolioValues?.some(p => p.symbol === normalizedSymbol)) {
             toast.warning("Stock already in portfolio!");
             return;
         }
 
-        portfolioAddAPI(symbol)
+        portfolioAddAPI(normalizedSymbol)
             .then((res) => {
                 if (res) {
                     toast.success("Stock added to portfolio!");
@@ -61,10 +59,9 @@ const SearchPage = (props: Props) => {
             });
     };
 
-    const onPortfolioDelete = (e: any) => {
-        e.preventDefault();
-        portfolioDeleteAPI(e.target[0].value).then((res) => {
-            if (res?.status == 200) {
+    const onPortfolioDelete = (symbol: string) => {
+        portfolioDeleteAPI(symbol).then((res) => {
+            if (res?.status === 200) {
                 toast.success("Stock deleted from portfolio!");
                 getPortfolio();
             }
@@ -83,8 +80,8 @@ const SearchPage = (props: Props) => {
 
         if (typeof result === "string") {
             setServerError(result);
-        } else if (Array.isArray(result)) {
-            setSearchResult(result);
+        } else if (Array.isArray(result?.data?.result)) {
+            setSearchResult(result.data.result);
         }
     };
 

@@ -2,13 +2,13 @@ import axios from "axios";
 import {
   CompanyBalanceSheet,
   CompanyCashFlow,
-  CompanyCompData,
   CompanyIncomeStatement,
   CompanyKeyMetrics,
   CompanyProfile,
   CompanySearch,
   CompanyTenK,
 } from "./company.d";
+import { API_BASE_URL } from "./config";
 
 export interface SearchResponse {
   count: number;
@@ -18,7 +18,7 @@ export interface SearchResponse {
 export const searchCompanies = async (query: string) => {
   try {
     const data = await axios.get<SearchResponse>(
-      `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/search?query=${query}`
     );
 
     return data;
@@ -31,7 +31,7 @@ export const searchCompanies = async (query: string) => {
 export const getCompanyProfile = async (query: string) => {
   try {
     const data = await axios.get<CompanyProfile>(
-      `https://finnhub.io/api/v1/stock/profile2?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/profile/${query}`
     );
 
     return data;
@@ -44,7 +44,7 @@ export const getCompanyProfile = async (query: string) => {
 export const getQuote = async (query: string) => {
   try {
     const data = await axios.get(
-      `https://finnhub.io/api/v1/quote?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/quote/${query}`
     );
 
     return data;
@@ -56,8 +56,8 @@ export const getQuote = async (query: string) => {
 
 export const getKeyMetrics = async (query: string) => {
   try {
-    const data = await axios.get<CompanyKeyMetrics[]>(
-      `https://finnhub.io/api/v1/stock/metric?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+    const data = await axios.get<CompanyKeyMetrics>(
+      `${API_BASE_URL}/stock/metrics/${query}`
     );
 
     return data;
@@ -70,7 +70,7 @@ export const getKeyMetrics = async (query: string) => {
 export const getIncomeStatement = async (query: string) => {
   try {
     const data = await axios.get<CompanyIncomeStatement[]>(
-      `https://finnhub.io/api/v1/stock/financials-reported?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/financials-reported/${query}`
     );
 
     return data;
@@ -83,7 +83,7 @@ export const getIncomeStatement = async (query: string) => {
 export const getBalanceSheet = async (query: string) => {
   try {
     const data = await axios.get<CompanyBalanceSheet[]>(
-      `https://finnhub.io/api/v1/stock/financials-reported?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/financials-reported/${query}`
     );
 
     return data;
@@ -96,7 +96,7 @@ export const getBalanceSheet = async (query: string) => {
 export const getCashFlow = async (query: string) => {
   try {
     const data = await axios.get<CompanyCashFlow[]>(
-      `https://finnhub.io/api/v1/stock/financials-reported?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/financials-reported/${query}`
     );
 
     return data;
@@ -108,8 +108,8 @@ export const getCashFlow = async (query: string) => {
 
 export const getCompData = async (query: string) => {
   try {
-    const data = await axios.get<CompanyCompData[]>(
-      `https://finnhub.io/api/v1/stock/peers?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+    const data = await axios.get<string[]>(
+      `${API_BASE_URL}/stock/peers/${query}`
     );
 
     return data;
@@ -122,7 +122,7 @@ export const getCompData = async (query: string) => {
 export const getTenK = async (query: string) => {
   try {
     const data = await axios.get<CompanyTenK[]>(
-      `https://finnhub.io/api/v1/stock/filings?symbol=${query}&token=${process.env.REACT_APP_API_KEY}`
+      `${API_BASE_URL}/stock/filings/${query}`
     );
 
     return data;

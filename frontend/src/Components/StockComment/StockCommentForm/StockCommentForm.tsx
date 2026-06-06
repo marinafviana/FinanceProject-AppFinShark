@@ -14,8 +14,14 @@ type CommentFormInputs = {
 };
 
 const validation = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
-  content: Yup.string().required("Content is required"),
+  title: Yup.string()
+    .required("Title is required")
+    .min(5, "Title must be 5 characters")
+    .max(280, "Title cannot be over 280 characters"),
+  content: Yup.string()
+    .required("Content is required")
+    .min(5, "Content must be 5 characters")
+    .max(280, "Content cannot be over 280 characters"),
 });
 
 const StockCommentForm = ({ symbol, handleComment }: Props) => {
@@ -46,6 +52,7 @@ const StockCommentForm = ({ symbol, handleComment }: Props) => {
           {...register("content")}
         ></textarea>
       </div>
+      {errors.content ? <p>{errors.content.message}</p> : ""}
       <button
         type="submit"
         className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-lightGreen rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"

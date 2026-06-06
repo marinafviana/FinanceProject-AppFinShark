@@ -1,11 +1,11 @@
-import React, { SyntheticEvent } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import DeletePortfolio from "../DeletePortfolio/DeletePortfolio";
 import { PortfolioGet } from "../../../Models/Portfolio";
 
 interface Props {
       portfolioValue: PortfolioGet;
-  onPortfolioDelete: (e: SyntheticEvent) => void;
+  onPortfolioDelete: (symbol: string) => void;
 }
 
 const CardPortfolio = ({ portfolioValue, onPortfolioDelete }: Props) => {

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Stock;
 using api.Helpers;
@@ -9,7 +5,6 @@ using api.Interfaces;
 using api.Mappers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
@@ -19,10 +14,109 @@ namespace api.Controllers
     {
         private readonly ApplicationDBContext _context;
         private readonly IStockRepository _stockRepo;
-        public StockController(ApplicationDBContext context, IStockRepository stockRepo)
+        private readonly IFMPService _fmpService;
+
+        public StockController(ApplicationDBContext context, IStockRepository stockRepo, IFMPService fmpService)
         {
             _stockRepo = stockRepo;
             _context = context;
+            _fmpService = fmpService;
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return BadRequest("Query is required");
+            }
+
+            var result = await _fmpService.SearchStocksAsync(query);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("profile/{symbol}")]
+        public async Task<IActionResult> GetCompanyProfile([FromRoute] string symbol)
+        {
+            var result = await _fmpService.GetCompanyProfileAsync(symbol);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("quote/{symbol}")]
+        public async Task<IActionResult> GetStockQuote([FromRoute] string symbol)
+        {
+            var result = await _fmpService.GetStockQuoteAsync(symbol);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("metrics/{symbol}")]
+        public async Task<IActionResult> GetKeyMetrics([FromRoute] string symbol)
+        {
+            var result = await _fmpService.GetKeyMetricsAsync(symbol);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("peers/{symbol}")]
+        public async Task<IActionResult> GetPeers([FromRoute] string symbol)
+        {
+            var result = await _fmpService.GetPeersAsync(symbol);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("financials-reported/{symbol}")]
+        public async Task<IActionResult> GetReportedFinancials([FromRoute] string symbol)
+        {
+            var result = await _fmpService.GetReportedFinancialsAsync(symbol);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("filings/{symbol}")]
+        public async Task<IActionResult> GetFilings([FromRoute] string symbol)
+        {
+            var result = await _fmpService.GetFilingsAsync(symbol);
+
+            if (result == null)
+            {
+                return StatusCode(503, "Unable to connect to Finnhub API");
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
@@ -33,10 +127,9 @@ namespace api.Controllers
                 return BadRequest(ModelState);
 
             var stocks = await _stockRepo.GetAllAsync(query);
-
             var stockDto = stocks.Select(s => s.ToStockDto()).ToList();
 
-            return Ok(stocks);
+            return Ok(stockDto);
         }
 
         [HttpGet("{id:int}")]
@@ -101,6 +194,5 @@ namespace api.Controllers
 
             return NoContent();
         }
-
     }
 }
